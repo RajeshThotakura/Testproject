@@ -1,0 +1,70 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  message 0x601 msg_response;
+}
+on message 0x701
+{
+  //positive responses for default session 
+  
+  msg_response.dlc = 0x08;
+  if (this.byte(1) == 0x10 && this.byte(2) == 0x01)
+  {
+    msg_response.byte(0) = 0x06;
+    msg_response.byte(1) = 0x50;
+    msg_response.byte(2) = 0x01;
+    msg_response.byte(3) = 0x01;
+    msg_response.byte(4) = 0xF4;
+    msg_response.byte(5) = 0x13;
+    msg_response.byte(6) = 0x88;
+    output(msg_response);
+  }
+  //positive responses for programing session 
+  
+  else if (this.byte(1) == 0x10 && this.byte(2) == 0x02)
+  {
+    msg_response.byte(0) = 0x06;
+    msg_response.byte(1) = 0x50;
+    msg_response.byte(2) = 0x02;
+    msg_response.byte(3) = 0x01;
+    msg_response.byte(4) = 0xF4;
+    msg_response.byte(5) = 0x13;
+    msg_response.byte(6) = 0x88;
+    output(msg_response);
+  }
+  //positive responses for extended session
+  
+  else if (this.byte(1) == 0x10 && this.byte(2) == 0x03)
+  {
+    msg_response.byte(0) = 0x06;
+    msg_response.byte(1) = 0x50;
+    msg_response.byte(2) = 0x03;
+    msg_response.byte(3) = 0x01;
+    msg_response.byte(4) = 0xF4;
+    msg_response.byte(5) = 0x13;
+    msg_response.byte(6) = 0x88;
+    output(msg_response);
+  }
+  // Negative response SID in correct.
+  if (this.byte(1) == 0x97) // here we can/should add all the SID mentione in the project.
+  {
+    msg_response.byte(0) = 0x03;
+    msg_response.byte(1) = 0x7F;
+    msg_response.byte(2) = this.byte(1);
+    msg_response.byte(3) = 0x11;
+    output(msg_response);
+  }
+  if (this.byte(1) == 0x10 && this.byte(2)!=0x1 || this.byte(2)!=0x2 || this.byte(2)!=0x3)
+  {
+    msg_response.byte(0) = 0x03;
+    msg_response.byte(1) = 0x7F;
+    msg_response.byte(2) = 0x10;
+    msg_response.byte(3) = 0x12;
+    output(msg_response);
+  }
+}
